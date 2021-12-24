@@ -7,7 +7,6 @@
  * Author URI:        https://techvengers.com
  * Text Domain:       wp-custom-post-style
  */
-safsdfdasfs
 require_once 'register-post-type.php';
 
 function add_my_custom_page() {
