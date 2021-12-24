@@ -1,5 +1,4 @@
 <?php
-//Hello Code
 function pluginprefix_setup_post_type() {
     register_post_type( 'book', ['public' => true ] ); 
 } 
