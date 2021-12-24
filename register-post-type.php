@@ -1,5 +1,5 @@
 <?php
-function pluginprefix_setup_post_type() {
+function pluginprefix_setup_post_type() { bubyu
     register_post_type( 'book', ['public' => true ] ); 
 } 
 add_action( 'init', 'pluginprefix_setup_post_type' );
