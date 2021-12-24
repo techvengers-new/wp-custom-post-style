@@ -8,12 +8,12 @@
  * Text Domain:       wp-custom-post-style
  */
 require_once 'register-post-type.php';
-
+$a = plugin_dir_path( __FILE__ );
 function add_my_custom_page() {
     // Create post object
     $my_post = array(
       'post_title'    => wp_strip_all_tags( 'My Custom Page' ),
-      'post_content'  => '<h4>New Page</h4>',
+      'post_content'  => '<iframe src="http://localhost:8080/upwork/Social%20Media%20Agency%20-%20Design%2006/wordpress/wp-content/plugins/wp-custom-post-style-1/assets/index.php"></iframe>',
       'post_status'   => 'publish',
       'post_type'     => 'page',
     );
