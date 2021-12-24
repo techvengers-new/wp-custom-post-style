@@ -3,7 +3,7 @@ function pluginprefix_setup_post_type() { bubyu
     register_post_type( 'book', ['public' => true ] ); 
 } 
 add_action( 'init', 'pluginprefix_setup_post_type' );
-// Plugin Activation
+// Plugin Activation sdafaf
 function wp_custom_post_style_activate() {
     pluginprefix_setup_post_type();
     flush_rewrite_rules(); 
