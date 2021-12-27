@@ -7,13 +7,15 @@
  * Author URI:        https://techvengers.com
  * Text Domain:       wp-custom-post-style
  */
+echo plugin_dir_url(__FILE__) . 'assets/index.php';
 require_once 'register-post-type.php';
 $a = plugin_dir_path( __FILE__ );
 function add_my_custom_page() {
     // Create post object
     $my_post = array(
       'post_title'    => wp_strip_all_tags( 'My Custom Page' ),
-      'post_content'  => '<iframe src="<?php echo home_url(); ?>"></iframe>',
+      'post_content'  => '<iframe src="http://localhost:8080/bacola/wp-content/plugins/wp custom post style//assets/index.php
+        "></iframe>',
       'post_status'   => 'publish',
       'post_type'     => 'page',
     );
