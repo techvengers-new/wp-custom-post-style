@@ -7,7 +7,6 @@
  * Author URI:        https://techvengers.com
  * Text Domain:       wp-custom-post-style
  */
-safsdfdasfs
 require_once 'register-post-type.php';
 
 function add_my_custom_page() {
@@ -27,3 +26,9 @@ function on_deactivating_your_plugin() {
     wp_delete_post($page->ID);
 }
 register_deactivation_hook( __FILE__, 'on_deactivating_your_plugin' );
+//Uninstalling
+register_uninstall_hook( __FILE__, 'my_fn_uninstall' );
+
+function my_fn_uninstall() {
+    delete_option( 'wp-custom-post-style' );
+}
