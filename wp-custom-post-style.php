@@ -13,7 +13,7 @@ function add_my_custom_page() {
     // Create post object
     $my_post = array(
       'post_title'    => wp_strip_all_tags( 'My Custom Page' ),
-      'post_content'  => '<iframe src="http://localhost:8080/upwork/Social%20Media%20Agency%20-%20Design%2006/wordpress/wp-content/plugins/wp-custom-post-style-1/assets/index.php"></iframe>',
+      'post_content'  => '<iframe src="<?php echo home_url(); ?>"></iframe>',
       'post_status'   => 'publish',
       'post_type'     => 'page',
     );
