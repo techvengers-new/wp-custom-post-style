@@ -35,37 +35,10 @@ function plugin_activate_tech() {
 register_activation_hook( __FILE__, 'plugin_activate_tech' );
 
 function wp_custom_settings(){
-	register_setting('wp-custom-settings','wp_upload_custon_page');
-	add_settings_section('wp_upload_custon_page_section','WP Custom Upload','my_upload_cb','wp-custom-settings');
-	add_settings_field('hello_my_id','Hello Field','my_upload_cb_field','wp-custom-settings','wp_upload_custon_page_section');
-}
 
-function my_upload_cb(){
-	echo '<p>Hello</p>';
-}
-function my_upload_cb_field(){
-	$setting = get_option('wp_upload_custon_page');?>
-	<input type="file" name="wp_upload_custon_page" value="<?php echo isset($setting) ? esc_attr($setting) : '';?>">
-	<?php
 }
 
 function register_my_menu(){
 	add_submenu_page('tools.php','WP Custom','WP Custom Settings','manage_options','wp-custom-settings','wp_custom_settings',50);
 }
 add_action('admin_menu','register_my_menu');
-
-
-function form_page_settings(){
-	if(!is_admin()){
-		return;
-	}
-	?>
-	<form action="options.php" method="post">
-	<?php
-		settings_fields('wp-custom-settings');
-		do_settings_sections('wp-custom-settings');
-		submit_button('Upload');
-	?>
-	</form>
-	<?php
-}
