@@ -31,7 +31,7 @@ class WpTechvengers
 
 	function table_create() {
 
-// 	global $user_ID;
+global $user_ID;
 // $new_post = array(
 // 'post_title' => 'My New Post',
 // 'post_content' => 'Lorem ipsum dolor sit amet...',
@@ -52,13 +52,21 @@ class WpTechvengers
 		<form method="post" enctype="multipart/form-data">
 			<input type="file" name="doc"/>
 			<input class="button-primary" type="submit" name="submit"/>
-		</form>';
+		</form>
+		<div style="color: red; margin-top: 10px">
+		<p>* Note you have to download this excel file.</p>
+		<a style="background: green;color: white; border-radius: 5px; padding: 10px ;margin-top: 30px" href="techvengers.com/wp-content/uploads/2021/10/TechVengers_2-204-x57_2a58b24036cd0e64724a89791828023a.png" download>
+		 Download Excel File
+		</a>
+		</div>
+		';
 		echo $html;
 	}
 
 	//Setting page HTML code
 
 	function wptech_setting_page_html(){
+		global $user_ID;
 		if(!is_admin()){
 			return;
 		}
@@ -77,15 +85,31 @@ class WpTechvengers
 			require($dir2);
 			
 			
+
 			$obj=PHPExcel_IOFactory::load($file);
 			foreach($obj->getWorksheetIterator() as $sheet){
 				$getHighestRow=$sheet->getHighestRow();
 				for($i=2;$i<=$getHighestRow;$i++){
-					$name=$sheet->getCellByColumnAndRow(0,$i)->getValue();
-					$email=$sheet->getCellByColumnAndRow(1,$i)->getValue();
-					if($name!=''){
+
+					$post_title=$sheet->getCellByColumnAndRow(0,$i)->getValue();
+					$post_content=$sheet->getCellByColumnAndRow(1,$i)->getValue();
+					$post_status='publish';
+					$post_date=date('Y-m-d H:i:s');
+					$post_author=$user_ID;
+					$post_type='post';
+					$post_category='';
+					if($post_title!=''){
 						global $wpdb;    
-						$result = $wpdb->get_results( "insert into wp_techvengers(name,email) values('$name','$email')");
+						$new_post = array(
+						'post_title' => $post_title,
+						'post_content' => $post_content,
+						'post_status' => $post_status,
+						'post_date' => $post_date,
+						'post_author' => $user_ID,
+						'post_type' => $post_type,
+						'post_category' => $post_category
+						);
+						$post_id = wp_insert_post($new_post);
 						
 					}
 				}
