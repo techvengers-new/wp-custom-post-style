@@ -39,8 +39,8 @@ class WpTechvengers
 	  
 	     $sql = "CREATE TABLE $table_name (
 	          id mediumint(9) NOT NULL AUTO_INCREMENT,
-	          field_x text NOT NULL,
-	          field_y text NOT NULL,
+	          name text NOT NULL,
+	          email text NOT NULL,
 	          UNIQUE KEY id (id)
 	     ) $charset_collate;";
 	     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -55,7 +55,7 @@ class WpTechvengers
 		$html = '<h1>Wp Techvengers</h1>
 		<form method="post" enctype="multipart/form-data">
 			<input type="file" name="doc"/>
-			<input type="submit" name="submit"/>
+			<input class="button-primary" type="submit" name="submit"/>
 		</form>';
 		echo $html;
 	}
