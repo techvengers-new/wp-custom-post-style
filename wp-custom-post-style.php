@@ -34,11 +34,69 @@ function plugin_activate_tech() {
 
 register_activation_hook( __FILE__, 'plugin_activate_tech' );
 
-function wp_custom_settings(){
+//Setting page HTML
+function wptech_setting_page_html(){
+	if(!is_admin()){
+		return;
+	}
+	?>
+	 <div class="wrap">
+	 	<form action="options.php" method="post">
+	 		<?php
+	 			settings_fields('wp-custom-settings');
+	 			do_settings_sections('wp-custom-settings');
+	 			submit_button('Save Changes');
+	 		?>
+	 	<!-- 	<input type="text" name="">
+	 		<button type="submit">Submit</button> -->
+	 	</form>
+	 </div>
+	
 
+	
+	<?php
+		 
 }
-
 function register_my_menu(){
-	add_submenu_page('tools.php','WP Custom','WP Custom Settings','manage_options','wp-custom-settings','wp_custom_settings',50);
+	add_menu_page('WP Custom','WP Custom Settings','manage_options','wp-custom-settings','wptech_setting_page_html', 'dashicons-database',50);
 }
+
 add_action('admin_menu','register_my_menu');
+//
+function wptech_plugin_settings(){
+
+	// register a new setting for "wp-custom-settings" page
+    register_setting('wp-custom-settings', 'wptech_file_upload');
+ 
+    // register a new section in the "wp-custom-settings" page
+    add_settings_section(
+        'wptech_file_upload_setting',
+        'WP Tech Upload', 'wptech_file_upload_setting_cb',
+        'wp-custom-settings'
+    );
+ 
+    // register a new field in the "wporg_settings_section" section, inside the "reading" page
+    add_settings_field(
+        'wptech_settings_upload_field',
+        'Upload file', 'wptech_settings_upload_field_cb',
+        'wp-custom-settings',
+        'wptech_file_upload_setting'
+    );
+}
+
+
+
+function wptech_file_upload_setting_cb(){
+	echo "<p class'text-danger'>Upload file in .xlxs</p>";
+}
+
+function wptech_settings_upload_field_cb(){
+// get the value of the setting we've registered with register_setting()
+    $setting = get_option('wptech_file_upload');
+    // output the field
+    ?>
+    <input type="text" name="wptech_file_upload" value="<?php echo isset( $setting ) ? esc_attr( $setting ) : ''; ?>">
+    <?php
+}
+
+add_action('admin_init','wptech_plugin_settings');
