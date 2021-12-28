@@ -9,8 +9,28 @@
  */
 
 
+class WpTechvengers
+{
+	// contructor function 
 
-function plugin_activate_tech() {
+	function __construct(){
+		add_action('admin_menu',array($this,'register_my_menu'));
+
+		
+	}
+
+	// plugin activation code
+
+	function activation()
+	{	
+		flush_rewrite_rules();
+		$this->table_create();
+	}
+
+	// Creating table in database 
+
+	function table_create() {
+
 	global $wpdb;
 	$table_name = $wpdb->prefix.'techvengers';
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -31,97 +51,94 @@ function plugin_activate_tech() {
 	}
 }
 
+	// Form HTML code
 
-register_activation_hook( __FILE__, 'plugin_activate_tech' );
+	function form_html_code(){
 
-//Setting page HTML
-function wptech_setting_page_html(){
-	if(!is_admin()){
-		return;
+		$html = '<h1>Wp Techvengers</h1>
+		<form method="post" enctype="multipart/form-data">
+			<input type="file" name="doc"/>
+			<input type="submit" name="submit"/>
+		</form>';
+		echo $html;
 	}
-	$dir1 = plugin_dir_path( __FILE__ ).'PHPExcel/PHPExcel.php';
-	$dir2 = plugin_dir_path( __FILE__ ).'PHPExcel/PHPExcel/IOFactory.php';
-	
-	if(isset($_POST['submit'])){
-	$file=$_FILES['doc']['tmp_name'];
+
+	//Setting page HTML code
+
+	function wptech_setting_page_html(){
+		if(!is_admin()){
+			return;
+		}
+		$dir1 = plugin_dir_path( __FILE__ ).'PHPExcel/PHPExcel.php';
+		$dir2 = plugin_dir_path( __FILE__ ).'PHPExcel/PHPExcel/IOFactory.php';
+		
+		if(isset($_POST['submit'])){
+		$file=$_FILES['doc']['tmp_name'];
 
 
-	$ext=pathinfo($_FILES['doc']['name'],PATHINFO_EXTENSION);
-	if($ext=='xlsx'){
-		
-		
-		require($dir1);
-		require($dir2);
-		
-		
-		$obj=PHPExcel_IOFactory::load($file);
-		foreach($obj->getWorksheetIterator() as $sheet){
-			$getHighestRow=$sheet->getHighestRow();
-			for($i=0;$i<=$getHighestRow;$i++){
-				$name=$sheet->getCellByColumnAndRow(0,$i)->getValue();
-				$email=$sheet->getCellByColumnAndRow(1,$i)->getValue();
-				if($name!=''){
-					global $wpdb;    
-					$result = $wpdb->get_results( "insert into wp_techvengers(name,email) values('$name','$email')");
-					// mysqli_query($con,"insert into wp_techvengers(name,email) values('$name','$email')");
+		$ext=pathinfo($_FILES['doc']['name'],PATHINFO_EXTENSION);
+		if($ext=='xlsx'){
+			
+			
+			require($dir1);
+			require($dir2);
+			
+			
+			$obj=PHPExcel_IOFactory::load($file);
+			foreach($obj->getWorksheetIterator() as $sheet){
+				$getHighestRow=$sheet->getHighestRow();
+				for($i=0;$i<=$getHighestRow;$i++){
+					$name=$sheet->getCellByColumnAndRow(0,$i)->getValue();
+					$email=$sheet->getCellByColumnAndRow(1,$i)->getValue();
+					if($name!=''){
+						global $wpdb;    
+						$result = $wpdb->get_results( "insert into wp_techvengers(name,email) values('$name','$email')");
+						
+					}
 				}
 			}
+		}else{
+			echo "Invalid file format";
 		}
-	}else{
-		echo "Invalid file format";
-	}
-}
-	?>
+		}
+	
 
-	<form method="post" enctype="multipart/form-data">
-		<input type="file" name="doc"/>
-		<input type="submit" name="submit"/>
-	</form>
+	$this->form_html_code();
+		
+		
+	
+	}
+
+	// Custom post type (menu on left sidebar)
+
+	function register_my_menu(){
+	add_menu_page('WP Custom','WP Techvengers','manage_options','wp-custom-settings',array($this,'wptech_setting_page_html'), 'dashicons-database',50);
+	}
+
 
 	
-	<?php
-		 
-}
-function register_my_menu(){
-	add_menu_page('WP Custom','WP Techvengers','manage_options','wp-custom-settings','wptech_setting_page_html', 'dashicons-database',50);
-}
 
-add_action('admin_menu','register_my_menu');
-//
-function wptech_plugin_settings(){
+	
+	// plugin deactivation code
 
-	// register a new setting for "wp-custom-settings" page
-    register_setting('wp-custom-settings', 'wptech_file_upload');
- 
-    // register a new section in the "wp-custom-settings" page
-    add_settings_section(
-        'wptech_file_upload_setting',
-        'WP Tech Upload', 'wptech_file_upload_setting_cb',
-        'wp-custom-settings'
-    );
- 
-    // register a new field in the "wptech_settings_upload_field" section, inside the "wp-custom-settings" page
-    add_settings_field(
-        'wptech_settings_upload_field',
-        'Upload file', 'wptech_settings_upload_field_cb',
-        'wp-custom-settings',
-        'wptech_file_upload_setting'
-    );
+	function deactivation()
+	{
+		
+	}
+	// plugin uninstallation code
+	function uninstall()
+	{
+		
+	}
 }
 
-
-
-function wptech_file_upload_setting_cb(){
-	echo "<p class'text-danger'>Upload file in .xlxs</p>";
+if( class_exists('WpTechvengers')){
+	$wpTechvengers = new WpTechvengers();
 }
 
-function wptech_settings_upload_field_cb(){
-// get the value of the setting we've registered with register_setting()
-    $setting = get_option('wptech_file_upload');
-    // output the field
-    ?>
-    <input type="text" name="wptech_file_upload" value="<?php echo isset( $setting ) ? esc_attr( $setting ) : ''; ?>">
-    <?php
-}
+register_activation_hook( __FILE__, array($wpTechvengers, 'activation') );
 
-add_action('admin_init','wptech_plugin_settings');
+
+
+
+
