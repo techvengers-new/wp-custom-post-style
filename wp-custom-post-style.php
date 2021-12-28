@@ -31,21 +31,17 @@ class WpTechvengers
 
 	function table_create() {
 
-	global $wpdb;
-	$table_name = $wpdb->prefix.'techvengers';
-	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-	     //table not in database. Create new table
-	     $charset_collate = $wpdb->get_charset_collate();
-	  
-	     $sql = "CREATE TABLE $table_name (
-	          id mediumint(9) NOT NULL AUTO_INCREMENT,
-	          name text NOT NULL,
-	          email text NOT NULL,
-	          UNIQUE KEY id (id)
-	     ) $charset_collate;";
-	     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-	     dbDelta( $sql );
-	}
+// 	global $user_ID;
+// $new_post = array(
+// 'post_title' => 'My New Post',
+// 'post_content' => 'Lorem ipsum dolor sit amet...',
+// 'post_status' => 'publish',
+// 'post_date' => date('Y-m-d H:i:s'),
+// 'post_author' => $user_ID,
+// 'post_type' => 'post',
+// 'post_category' => array(0)
+// );
+// $post_id = wp_insert_post($new_post);
 }
 
 	// Form HTML code
@@ -84,7 +80,7 @@ class WpTechvengers
 			$obj=PHPExcel_IOFactory::load($file);
 			foreach($obj->getWorksheetIterator() as $sheet){
 				$getHighestRow=$sheet->getHighestRow();
-				for($i=0;$i<=$getHighestRow;$i++){
+				for($i=2;$i<=$getHighestRow;$i++){
 					$name=$sheet->getCellByColumnAndRow(0,$i)->getValue();
 					$email=$sheet->getCellByColumnAndRow(1,$i)->getValue();
 					if($name!=''){
