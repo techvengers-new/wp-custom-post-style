@@ -24,25 +24,12 @@ class WpTechvengers
 	function activation()
 	{	
 		flush_rewrite_rules();
-		$this->table_create();
+		// $this->upload_img_media();
 	}
 
-	// Creating table in database 
 
-	function table_create() {
 
-global $user_ID;
-// $new_post = array(
-// 'post_title' => 'My New Post',
-// 'post_content' => 'Lorem ipsum dolor sit amet...',
-// 'post_status' => 'publish',
-// 'post_date' => date('Y-m-d H:i:s'),
-// 'post_author' => $user_ID,
-// 'post_type' => 'post',
-// 'post_category' => array(0)
-// );
-// $post_id = wp_insert_post($new_post);
-}
+	
 
 	// Form HTML code
 
@@ -55,12 +42,58 @@ global $user_ID;
 		</form>
 		<div style="color: red; margin-top: 10px">
 		<p>* Note you have to download this excel file.</p>
-		<a style="background: green;color: white; border-radius: 5px; padding: 10px ;margin-top: 30px" href="techvengers.com/wp-content/uploads/2021/10/TechVengers_2-204-x57_2a58b24036cd0e64724a89791828023a.png" download>
+		<a style="background: green;color: white; border-radius: 5px; padding: 10px ;margin-top: 30px" href="http://localhost:8080/custom%20plugin/wordpress/wp-content/uploads/2021/12/Book1-1.xlsx">
 		 Download Excel File
 		</a>
 		</div>
 		';
 		echo $html;
+	}
+
+	function make_cat(){
+		  wp_insert_term(
+		  'Example Category','category',
+			array(
+		    'description' => 'This is an example category created with wp_insert_term.',
+		     'slug'    => 'example-category'
+		    )
+
+		  );
+	}
+
+	// image uploading in wordpress media
+
+	function upload_img_media(){
+		$image_url = 'https://techvengers.com/wp-content/uploads/2021/10/TechVengers_2-204-x57_2a58b24036cd0e64724a89791828023a.png';
+
+		$upload_dir = wp_upload_dir();
+
+		$image_data = file_get_contents( $image_url );
+
+		$filename = basename( $image_url );
+
+		if ( wp_mkdir_p( $upload_dir['path'] ) ) {
+		  $file = $upload_dir['path'] . '/' . $filename;
+		}
+		else {
+		  $file = $upload_dir['basedir'] . '/' . $filename;
+		}
+
+		file_put_contents( $file, $image_data );
+
+		$wp_filetype = wp_check_filetype( $filename, null );
+
+		$attachment = array(
+		  'post_mime_type' => $wp_filetype['type'],
+		  'post_title' => sanitize_file_name( $filename ),
+		  'post_content' => '',
+		  'post_status' => 'inherit'
+		);
+
+		$attach_id = wp_insert_attachment( $attachment, $file );
+		require_once( ABSPATH . 'wp-admin/includes/image.php' );
+		$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+		wp_update_attachment_metadata( $attach_id, $attach_data );
 	}
 
 	//Setting page HTML code
@@ -97,7 +130,10 @@ global $user_ID;
 					$post_date=date('Y-m-d H:i:s');
 					$post_author=$user_ID;
 					$post_type='post';
-					$post_category='';
+					$post_category=$sheet->getCellByColumnAndRow(2,$i)->getValue();
+
+
+
 					if($post_title!=''){
 						global $wpdb;    
 						$new_post = array(
