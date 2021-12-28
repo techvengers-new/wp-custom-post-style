@@ -39,26 +39,52 @@ function wptech_setting_page_html(){
 	if(!is_admin()){
 		return;
 	}
-	?>
-	 <div class="wrap">
-	 	<form action="options.php" method="post">
-	 		<?php
-	 			settings_fields('wp-custom-settings');
-	 			do_settings_sections('wp-custom-settings');
-	 			submit_button('Save Changes');
-	 		?>
-	 	<!-- 	<input type="text" name="">
-	 		<button type="submit">Submit</button> -->
-	 	</form>
-	 </div>
+	$dir1 = plugin_dir_path( __FILE__ ).'PHPExcel/PHPExcel.php';
+	$dir2 = plugin_dir_path( __FILE__ ).'PHPExcel/PHPExcel/IOFactory.php';
 	
+	if(isset($_POST['submit'])){
+	$file=$_FILES['doc']['tmp_name'];
+	
+	echo "<pre>";print_r($file);
+
+	$ext=pathinfo($_FILES['doc']['name'],PATHINFO_EXTENSION);
+	if($ext=='xlsx'){
+		
+		
+		require($dir1);
+		require($dir2);
+		
+		
+		$obj=PHPExcel_IOFactory::load($file);
+		foreach($obj->getWorksheetIterator() as $sheet){
+			$getHighestRow=$sheet->getHighestRow();
+			for($i=0;$i<=$getHighestRow;$i++){
+				$name=$sheet->getCellByColumnAndRow(0,$i)->getValue();
+				$email=$sheet->getCellByColumnAndRow(1,$i)->getValue();
+				if($name!=''){
+					global $wpdb;    
+					$result = $wpdb->get_results( "insert into wp_techvengers(name,email) values('$name','$email')");
+					// mysqli_query($con,"insert into wp_techvengers(name,email) values('$name','$email')");
+				}
+			}
+		}
+	}else{
+		echo "Invalid file format";
+	}
+}
+	?>
+
+	<form method="post" enctype="multipart/form-data">
+		<input type="file" name="doc"/>
+		<input type="submit" name="submit"/>
+	</form>
 
 	
 	<?php
 		 
 }
 function register_my_menu(){
-	add_menu_page('WP Custom','WP Custom Settings','manage_options','wp-custom-settings','wptech_setting_page_html', 'dashicons-database',50);
+	add_menu_page('WP Custom','WP Techvengers','manage_options','wp-custom-settings','wptech_setting_page_html', 'dashicons-database',50);
 }
 
 add_action('admin_menu','register_my_menu');
