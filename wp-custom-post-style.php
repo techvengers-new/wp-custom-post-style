@@ -44,8 +44,7 @@ function wptech_setting_page_html(){
 	
 	if(isset($_POST['submit'])){
 	$file=$_FILES['doc']['tmp_name'];
-	
-	echo "<pre>";print_r($file);
+
 
 	$ext=pathinfo($_FILES['doc']['name'],PATHINFO_EXTENSION);
 	if($ext=='xlsx'){
@@ -101,7 +100,7 @@ function wptech_plugin_settings(){
         'wp-custom-settings'
     );
  
-    // register a new field in the "wporg_settings_section" section, inside the "reading" page
+    // register a new field in the "wptech_settings_upload_field" section, inside the "wp-custom-settings" page
     add_settings_field(
         'wptech_settings_upload_field',
         'Upload file', 'wptech_settings_upload_field_cb',
