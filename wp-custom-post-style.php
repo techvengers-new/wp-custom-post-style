@@ -14,13 +14,21 @@ class WpTechvengers
 	// contructor function 
 
 	function __construct(){
+		// including css files
+		$this->plugin_scripts();
 		add_action('admin_menu',array($this,'register_my_menu'));
 		$plugin = plugin_basename( __FILE__ );
 		add_filter( "plugin_action_links_$plugin", array($this, 'plugin_add_settings_link') );
 		
 	}
+	// enqueue css & js files
 
-	// plugin activation code
+	public function plugin_scripts(){
+
+		wp_enqueue_style( 'style',plugins_url('/inc/assets/css/style.css', __FILE__ ));
+	}
+
+	// plugin activation function
 
 	function activation()
 	{	
