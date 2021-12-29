@@ -2,7 +2,7 @@
 /**
  * Plugin Name:      Tech Fetch
  * Plugin URI:        #
- * Description:       Provides Custom Post Style
+ * Description:       Import data from Excel (xlsx) file
  * Author:            Team Techvengers
  * Author URI:        https://techvengers.com
  * Text Domain:       tech-fetch
