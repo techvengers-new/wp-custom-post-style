@@ -3,7 +3,7 @@
 * Template: Basic Form
 */
 ?>
-<h1>Wp Techvengers</h1>
+<h1>Tech Fetch</h1>
 <form method="post" enctype="multipart/form-data">
    <input type="file" name="doc"/>
    <input class="button-primary" type="submit" name="submit"/>
