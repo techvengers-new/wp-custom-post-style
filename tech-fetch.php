@@ -120,9 +120,9 @@ class WpTechvengers
 					$post_author=$user_ID;
 					$post_type='post';
 					$post_image=$sheet->getCellByColumnAndRow(2,$i)->getValue();
-					$post_category='';
+					$post_category=$sheet->getCellByColumnAndRow(3,$i)->getValue();;
 					$image_id_new = $this->image_get_id($post_image);
-
+					$new_cat=$this->category_get_id($post_category);
 					
 
 					if($post_title!=''){
@@ -134,7 +134,7 @@ class WpTechvengers
 						'post_date' => $post_date,
 						'post_author' => $user_ID,
 						'post_type' => $post_type,
-						'post_category' => $post_category
+						'post_category' => array($new_cat)
 						);
 						$post_id = wp_insert_post($new_post);
 
