@@ -111,7 +111,7 @@ class WpTechvengers
 			$obj=PHPExcel_IOFactory::load($file);
 			foreach($obj->getWorksheetIterator() as $sheet){
 				$getHighestRow=$sheet->getHighestRow();
-				for($i=1;$i<=$getHighestRow;$i++){
+				for($i=2;$i<=$getHighestRow;$i++){
 
 					$post_title=$sheet->getCellByColumnAndRow(0,$i)->getValue();
 					$post_content=$sheet->getCellByColumnAndRow(1,$i)->getValue();
