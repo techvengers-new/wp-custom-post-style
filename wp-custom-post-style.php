@@ -37,8 +37,14 @@ class WpTechvengers
 		
 		
 	}
-
-	function image_get_id($url_img){
+// Create New Unique Category and return ID
+	function category_get_id(string $cat_id_name){
+		$new_cat = $cat_id_name;
+		$cat_id = wp_create_category( $new_cat );
+		return $cat_id;
+	}
+// Upload image and return ID
+	function image_get_id(string $url_img){
 		$url = $url_img;
 		require_once(ABSPATH . 'wp-admin/includes/media.php');
 		require_once(ABSPATH . 'wp-admin/includes/file.php');
@@ -78,43 +84,6 @@ class WpTechvengers
 
 		  );
 	}
-
-	// image uploading in wordpress media
-
-	function upload_img_media()
-	{
-		$image_url = 'https://techvengers.com/wp-content/uploads/2021/10/TechVengers_2-204-x57_2a58b24036cd0e64724a89791828023a.png';
-
-		$upload_dir = wp_upload_dir();
-
-		$image_data = file_get_contents( $image_url );
-
-		$filename = basename( $image_url );
-
-		if ( wp_mkdir_p( $upload_dir['path'] ) ) {
-		  $file = $upload_dir['path'] . '/' . $filename;
-		}
-		else {
-		  $file = $upload_dir['basedir'] . '/' . $filename;
-		}
-
-		file_put_contents( $file, $image_data );
-
-		$wp_filetype = wp_check_filetype( $filename, null );
-
-		$attachment = array(
-		  'post_mime_type' => $wp_filetype['type'],
-		  'post_title' => sanitize_file_name( $filename ),
-		  'post_content' => '',
-		  'post_status' => 'inherit'
-		);
-
-		$attach_id = wp_insert_attachment( $attachment, $file );
-		require_once( ABSPATH . 'wp-admin/includes/image.php' );
-		$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
-		wp_update_attachment_metadata( $attach_id, $attach_data );
-	}
-
 	//Setting page HTML code
 
 	function wptech_setting_page_html()
@@ -177,9 +146,7 @@ class WpTechvengers
 	
 
 	$this->form_html_code();
-		
-		
-	
+
 	}
 
 	// Custom post type (menu on left sidebar)
@@ -188,7 +155,6 @@ class WpTechvengers
 	add_menu_page('Tech Fetch','Tech Fetch','manage_options','general-settings',array($this,'wptech_setting_page_html'), 'dashicons-database',50);
 	}
 
-	
 	// plugin deactivation code
 
 	function deactivation()
@@ -207,10 +173,3 @@ if( class_exists('WpTechvengers')){
 }
 
 register_activation_hook( __FILE__, array($wpTechvengers, 'activation') );
-
-
-
-
-
-
-
