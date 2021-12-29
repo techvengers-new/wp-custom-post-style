@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name:       WP Custom Post Style
+ * Plugin Name:      Tech Fetch
  * Plugin URI:        #
  * Description:       Provides Custom Post Style
  * Author:            Team Techvengers
  * Author URI:        https://techvengers.com
- * Text Domain:       wp-custom-post-style
+ * Text Domain:       tech-fetch
  */
 
 
@@ -15,7 +15,8 @@ class WpTechvengers
 
 	function __construct(){
 		add_action('admin_menu',array($this,'register_my_menu'));
-
+		$plugin = plugin_basename( __FILE__ );
+		add_filter( "plugin_action_links_$plugin", array($this, 'plugin_add_settings_link') );
 		
 	}
 
@@ -24,33 +25,32 @@ class WpTechvengers
 	function activation()
 	{	
 		flush_rewrite_rules();
-		// $this->upload_img_media();
+		add_filter("plugin_action_links_$this->plugin", array($this, 'settings_link'));
+		
 	}
 
+	// setting link in plugin
 
+	function plugin_add_settings_link( $links ) 
+	{
+	    $settings_link = '<a href="admin.php?page=general-settings">' . __( 'Settings' ) . '</a>';
+	    array_push( $links, $settings_link );
+	  	return $links;
+	}
 
 	
 
 	// Form HTML code
 
-	function form_html_code(){
+	function form_html_code()
+	{
+		require_once(plugin_dir_path( __FILE__ ).'/inc/templates/basic-form.php');
 
-		$html = '<h1>Wp Techvengers</h1>
-		<form method="post" enctype="multipart/form-data">
-			<input type="file" name="doc"/>
-			<input class="button-primary" type="submit" name="submit"/>
-		</form>
-		<div style="color: red; margin-top: 10px">
-		<p>* Note you have to download this excel file.</p>
-		<a style="background: green;color: white; border-radius: 5px; padding: 10px ;margin-top: 30px" href="http://localhost:8080/custom%20plugin/wordpress/wp-content/uploads/2021/12/Book1-1.xlsx">
-		 Download Excel File
-		</a>
-		</div>
-		';
-		echo $html;
+	
 	}
 
-	function make_cat(){
+	function make_cat()
+	{
 		  wp_insert_term(
 		  'Example Category','category',
 			array(
@@ -63,7 +63,8 @@ class WpTechvengers
 
 	// image uploading in wordpress media
 
-	function upload_img_media(){
+	function upload_img_media()
+	{
 		$image_url = 'https://techvengers.com/wp-content/uploads/2021/10/TechVengers_2-204-x57_2a58b24036cd0e64724a89791828023a.png';
 
 		$upload_dir = wp_upload_dir();
@@ -98,7 +99,8 @@ class WpTechvengers
 
 	//Setting page HTML code
 
-	function wptech_setting_page_html(){
+	function wptech_setting_page_html()
+	{
 		global $user_ID;
 		if(!is_admin()){
 			return;
@@ -165,11 +167,8 @@ class WpTechvengers
 	// Custom post type (menu on left sidebar)
 
 	function register_my_menu(){
-	add_menu_page('WP Custom','WP Techvengers','manage_options','wp-custom-settings',array($this,'wptech_setting_page_html'), 'dashicons-database',50);
+	add_menu_page('Tech Fetch','Tech Fetch','manage_options','general-settings',array($this,'wptech_setting_page_html'), 'dashicons-database',50);
 	}
-
-
-	
 
 	
 	// plugin deactivation code
@@ -190,6 +189,8 @@ if( class_exists('WpTechvengers')){
 }
 
 register_activation_hook( __FILE__, array($wpTechvengers, 'activation') );
+
+
 
 
 
