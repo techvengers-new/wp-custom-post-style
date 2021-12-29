@@ -33,8 +33,19 @@ class WpTechvengers
 	function activation()
 	{	
 		flush_rewrite_rules();
-		add_filter("plugin_action_links_$this->plugin", array($this, 'settings_link'));
+		//add_filter("plugin_action_links_$this->plugin", array($this, 'settings_link'));
 		
+		
+	}
+
+	function image_get_id($url_img){
+		$url = $url_img;
+		require_once(ABSPATH . 'wp-admin/includes/media.php');
+		require_once(ABSPATH . 'wp-admin/includes/file.php');
+		require_once(ABSPATH . 'wp-admin/includes/image.php');
+		$src = media_sideload_image( $url, null, null, 'src' );
+		$image_id = attachment_url_to_postid( $src );
+		return $image_id;
 	}
 
 	// setting link in plugin
@@ -53,7 +64,7 @@ class WpTechvengers
 	function form_html_code()
 	{
 		require_once(plugin_dir_path( __FILE__ ).'/inc/templates/basic-form.php');
-
+		$this->image_get_id();
 	
 	}
 
