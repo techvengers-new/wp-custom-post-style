@@ -64,7 +64,6 @@ class WpTechvengers
 	function form_html_code()
 	{
 		require_once(plugin_dir_path( __FILE__ ).'/inc/templates/basic-form.php');
-		$this->image_get_id();
 	
 	}
 
