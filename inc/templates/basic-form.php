@@ -21,7 +21,7 @@
 	<ol>
 		<li>Just <a href="http://localhost:8080/custom%20plugin/wordpress/wp-content/uploads/2021/12/Book1-1.xlsx">download</a> above excel file.</li>
 		<li>Open that excel file.</li>
-		<li>Just enter your post data while keeping header same.</li>
+		<li>Now enter your post data while keeping header same.</li>
 		<li>Upload it, now you'r done.</li>
 
 	</ol>
