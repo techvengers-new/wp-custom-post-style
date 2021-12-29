@@ -111,7 +111,7 @@ class WpTechvengers
 			$obj=PHPExcel_IOFactory::load($file);
 			foreach($obj->getWorksheetIterator() as $sheet){
 				$getHighestRow=$sheet->getHighestRow();
-				for($i=2;$i<=$getHighestRow;$i++){
+				for($i=1;$i<=$getHighestRow;$i++){
 
 					$post_title=$sheet->getCellByColumnAndRow(0,$i)->getValue();
 					$post_content=$sheet->getCellByColumnAndRow(1,$i)->getValue();
@@ -119,9 +119,11 @@ class WpTechvengers
 					$post_date=date('Y-m-d H:i:s');
 					$post_author=$user_ID;
 					$post_type='post';
-					$post_category=$sheet->getCellByColumnAndRow(2,$i)->getValue();
+					$post_image=$sheet->getCellByColumnAndRow(2,$i)->getValue();
+					$post_category='';
+					$image_id_new = $this->image_get_id($post_image);
 
-
+					
 
 					if($post_title!=''){
 						global $wpdb;    
@@ -135,6 +137,10 @@ class WpTechvengers
 						'post_category' => $post_category
 						);
 						$post_id = wp_insert_post($new_post);
+
+						require_once(ABSPATH . 'wp-admin/includes/image.php');
+
+						set_post_thumbnail( $post_id, $image_id_new );
 						
 					}
 				}
