@@ -115,7 +115,6 @@ class WpTechvengers
 
 	function wptech_setting_page_html()
 	{
-		$this->my_acf_add_local_field_groups('hellosir');
 		global $user_ID;
 		if(!is_admin()){
 			return;
@@ -162,6 +161,7 @@ class WpTechvengers
 	
 
 	$this->form_html_code();
+	$this->my_acf_add_local_field_groups('hellosir');
 
 	}
 
