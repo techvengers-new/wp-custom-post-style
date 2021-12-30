@@ -38,21 +38,21 @@ class WpTechvengers
 		
 	}
 // Create New Unique Category and return ID
-	function category_get_id(string $cat_id_name){
-		$new_cat = $cat_id_name;
-		$cat_id = wp_create_category( $new_cat );
-		return $cat_id;
-	}
-// Upload image and return ID
-	function image_get_id(string $url_img){
-		$url = $url_img;
-		require_once(ABSPATH . 'wp-admin/includes/media.php');
-		require_once(ABSPATH . 'wp-admin/includes/file.php');
-		require_once(ABSPATH . 'wp-admin/includes/image.php');
-		$src = media_sideload_image( $url, null, null, 'src' );
-		$image_id = attachment_url_to_postid( $src );
-		return $image_id;
-	}
+// 	function category_get_id(string $cat_id_name){
+// 		$new_cat = $cat_id_name;
+// 		$cat_id = wp_create_category( $new_cat );
+// 		return $cat_id;
+// 	}
+// // Upload image and return ID
+// 	function image_get_id(string $url_img){
+// 		$url = $url_img;
+// 		require_once(ABSPATH . 'wp-admin/includes/media.php');
+// 		require_once(ABSPATH . 'wp-admin/includes/file.php');
+// 		require_once(ABSPATH . 'wp-admin/includes/image.php');
+// 		$src = media_sideload_image( $url, null, null, 'src' );
+// 		$image_id = attachment_url_to_postid( $src );
+// 		return $image_id;
+// 	}
 
 	// setting link in plugin
 
@@ -70,7 +70,34 @@ class WpTechvengers
 	function form_html_code()
 	{
 		require_once(plugin_dir_path( __FILE__ ).'/inc/templates/basic-form.php');
+		
 	
+	}
+
+	function my_acf_add_local_field_groups($hello) {
+	
+		acf_add_local_field_group(array(
+			'key' => 'group_1',
+			'title' => 'My Group',
+			'fields' => array (
+				array (
+					'key' => 'field_1',
+					'label' => $hello,
+					'name' => 'sub_title',
+					'type' => 'text',
+				)
+			),
+			'location' => array (
+				array (
+					array (
+						'param' => 'post_type',
+						'operator' => '==',
+						'value' => 'post',
+					),
+				),
+			),
+		));
+		
 	}
 
 	function make_cat()
@@ -88,6 +115,7 @@ class WpTechvengers
 
 	function wptech_setting_page_html()
 	{
+		$this->my_acf_add_local_field_groups('hellosir');
 		global $user_ID;
 		if(!is_admin()){
 			return;
@@ -105,8 +133,6 @@ class WpTechvengers
 			
 			require($dir1);
 			require($dir2);
-			
-			
 
 			$obj=PHPExcel_IOFactory::load($file);
 			foreach($obj->getWorksheetIterator() as $sheet){
@@ -121,28 +147,12 @@ class WpTechvengers
 					$post_type='post';
 					$post_image=$sheet->getCellByColumnAndRow(2,$i)->getValue();
 					$post_category=$sheet->getCellByColumnAndRow(3,$i)->getValue();;
-					$image_id_new = $this->image_get_id($post_image);
-					$new_cat=$this->category_get_id($post_category);
+					// $image_id_new = $this->image_get_id($post_image);
+					// $new_cat=$this->category_get_id($post_category);
 					
 
-					if($post_title!=''){
-						global $wpdb;    
-						$new_post = array(
-						'post_title' => $post_title,
-						'post_content' => $post_content,
-						'post_status' => $post_status,
-						'post_date' => $post_date,
-						'post_author' => $user_ID,
-						'post_type' => $post_type,
-						'post_category' => array($new_cat)
-						);
-						$post_id = wp_insert_post($new_post);
-
-						require_once(ABSPATH . 'wp-admin/includes/image.php');
-
-						set_post_thumbnail( $post_id, $image_id_new );
+					
 						
-					}
 				}
 			}
 		}else{
@@ -178,4 +188,8 @@ if( class_exists('WpTechvengers')){
 	$wpTechvengers = new WpTechvengers();
 }
 
+//$wpTechvengers->my_acf_add_local_field_groups('hellomyself');
+
 register_activation_hook( __FILE__, array($wpTechvengers, 'activation') );
+
+//add_action('acf/init', array($wpTechvengers, 'my_acf_add_local_field_groups'));
