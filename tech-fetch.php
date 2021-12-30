@@ -33,29 +33,7 @@ class WpTechvengers
 	function activation()
 	{	
 		flush_rewrite_rules();
-		//add_filter("plugin_action_links_$this->plugin", array($this, 'settings_link'));
-		
-		
 	}
-// Create New Unique Category and return ID
-// 	function category_get_id(string $cat_id_name){
-// 		$new_cat = $cat_id_name;
-// 		$cat_id = wp_create_category( $new_cat );
-// 		return $cat_id;
-// 	}
-// // Upload image and return ID
-// 	function image_get_id(string $url_img){
-// 		$url = $url_img;
-// 		require_once(ABSPATH . 'wp-admin/includes/media.php');
-// 		require_once(ABSPATH . 'wp-admin/includes/file.php');
-// 		require_once(ABSPATH . 'wp-admin/includes/image.php');
-// 		$src = media_sideload_image( $url, null, null, 'src' );
-// 		$image_id = attachment_url_to_postid( $src );
-// 		return $image_id;
-// 	}
-
-	// setting link in plugin
-
 	function plugin_add_settings_link( $links ) 
 	{
 	    $settings_link = '<a href="admin.php?page=general-settings">' . __( 'Settings' ) . '</a>';
@@ -74,15 +52,15 @@ class WpTechvengers
 	
 	}
 
-	function my_acf_add_local_field_groups($hello) {
-	
+	public function my_acf_add_local_field_groups() {
+
 		acf_add_local_field_group(array(
 			'key' => 'group_1',
 			'title' => 'My Group',
 			'fields' => array (
 				array (
 					'key' => 'field_1',
-					'label' => $hello,
+					'label' => '$hello',
 					'name' => 'sub_title',
 					'type' => 'text',
 				)
@@ -128,8 +106,6 @@ class WpTechvengers
 
 		$ext=pathinfo($_FILES['doc']['name'],PATHINFO_EXTENSION);
 		if($ext=='xlsx'){
-			
-			
 			require($dir1);
 			require($dir2);
 
@@ -148,20 +124,16 @@ class WpTechvengers
 					$post_category=$sheet->getCellByColumnAndRow(3,$i)->getValue();;
 					// $image_id_new = $this->image_get_id($post_image);
 					// $new_cat=$this->category_get_id($post_category);
-					
-
-					
 						
+					}
 				}
+			}else{
+				echo "Invalid file format";
 			}
-		}else{
-			echo "Invalid file format";
 		}
-		}
-	
 
 	$this->form_html_code();
-	$this->my_acf_add_local_field_groups('hellosir');
+	//echo $this->my_acf_add_local_field_groups('hellosir');
 
 	}
 
@@ -188,8 +160,8 @@ if( class_exists('WpTechvengers')){
 	$wpTechvengers = new WpTechvengers();
 }
 
-//$wpTechvengers->my_acf_add_local_field_groups('hellomyself');
+//$wpTechvengers->my_acf_add_local_field_groups('hellosir');
 
 register_activation_hook( __FILE__, array($wpTechvengers, 'activation') );
 
-//add_action('acf/init', array($wpTechvengers, 'my_acf_add_local_field_groups'));
+add_filter('acf/init', array($wpTechvengers, 'my_acf_add_local_field_groups',));
